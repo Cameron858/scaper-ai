@@ -2,6 +2,9 @@
 Web scraper for fishkeeping caresheets.
 
 Fetches caresheet data from fishkeeping.co.uk and saves to local files.
+
+Usage:
+    uv run scripts/01_scrape_caresheets.py
 """
 
 import logging
