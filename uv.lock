@@ -3493,6 +3493,8 @@ dependencies = [
     { name = "lxml" },
     { name = "numpy" },
     { name = "pandas" },
+    { name = "pydantic" },
+    { name = "pydantic-settings" },
     { name = "pyprojroot" },
     { name = "requests" },
 ]
@@ -3522,6 +3524,8 @@ requires-dist = [
     { name = "lxml", specifier = ">=6.1.1" },
     { name = "numpy", specifier = ">=2.4.6" },
     { name = "pandas", specifier = ">=3.0.3" },
+    { name = "pydantic", specifier = ">=2.13.4" },
+    { name = "pydantic-settings", specifier = ">=2.14.1" },
     { name = "pyprojroot", specifier = ">=0.3.0" },
     { name = "requests", specifier = ">=2.34.2" },
 ]
