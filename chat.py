@@ -6,6 +6,8 @@ from langchain_ollama import ChatOllama, OllamaEmbeddings
 from pyprojroot import here
 from starlette.exceptions import StarletteDeprecationWarning
 
+from scaper_ai import settings
+
 SYS_PROMPT = """
 You are a helpful assistant for fishkeeping and aquarium care.
 
@@ -24,8 +26,7 @@ Rules:
 - If you do not know the answer, say "I don't know".
 """
 
-EMBEDDING_MODEL = "nomic-embed-text"
-embeddings = OllamaEmbeddings(model=EMBEDDING_MODEL)
+embeddings = OllamaEmbeddings(model=settings.embed_model)
 
 vector_store = Chroma(
     collection_name="caresheets",
@@ -41,7 +42,7 @@ retriever = vector_store.as_retriever(
     },
 )
 
-chat = ChatOllama(model="llama3.2")
+chat = ChatOllama(model=settings.chat_model)
 
 
 def response(message, history):

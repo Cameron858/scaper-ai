@@ -16,6 +16,8 @@ from langchain_ollama import OllamaEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from pyprojroot import here
 
+from scaper_ai import settings
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -133,7 +135,7 @@ def main():
     )
     parser.add_argument(
         "--embedding-model",
-        default="nomic-embed-text",
+        default=settings.embed_model,
         help="Name of the embedding model to use (default: nomic-embed-text)",
     )
     parser.add_argument(
@@ -176,7 +178,9 @@ def main():
         logger.info(f"Split into {len(split_docs)} chunks.")
 
         # Populate vector store
-        logger.info(f"Populating vector store (collection: {args.collection_name})...")
+        logger.info(
+            f"Populating vector store (collection: {args.collection_name}) using {args.embedding_model!r}..."
+        )
         vector_store = populate_vector_store(
             split_docs,
             embedding_model=args.embedding_model,
