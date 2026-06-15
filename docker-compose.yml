@@ -1,0 +1,15 @@
+name: scaper-ai-neoj4
+
+services:
+  neo4j:
+    image: neo4j:community
+    ports:
+      - 7474:7474
+      - 7687:7687
+    environment:
+      - NEO4J_AUTH=neo4j/password
+    volumes:
+      - ./db/neo4j/data:/data
+      - ./db/neo4j/logs:/logs
+      - ./db/neo4j/conf:/conf
+      - ./db/neo4j/plugins:/plugins
