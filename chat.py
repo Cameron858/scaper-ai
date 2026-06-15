@@ -3,7 +3,7 @@ import warnings
 import gradio as gr
 from starlette.exceptions import StarletteDeprecationWarning
 
-from scaper_ai.retrieval import chat, retriever
+from scaper_ai.retrieval import create_chat, create_retriever
 
 SYS_PROMPT = """
 You are a helpful assistant for fishkeeping and aquarium care.
@@ -22,6 +22,9 @@ Rules:
 - Answer directly and concisely.
 - If you do not know the answer, say "I don't know".
 """
+
+retriever = create_retriever()
+chat = create_chat()
 
 
 def response(message, history):
