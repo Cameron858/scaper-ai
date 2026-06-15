@@ -1,4 +1,4 @@
-# scraper-ai
+# scaper-ai
 
 A small Python project for collecting fishkeeping caresheet content and turning it into a local vector store for retrieval-based AI workflows.
 
