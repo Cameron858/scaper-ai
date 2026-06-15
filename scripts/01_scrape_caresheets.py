@@ -4,7 +4,6 @@ Web scraper for fishkeeping caresheets.
 Fetches caresheet data from fishkeeping.co.uk and saves to local files.
 """
 
-import hashlib
 import logging
 import random
 import time
@@ -64,7 +63,7 @@ def main():
 
     logger.info(f"Found {len(links)} caresheet links")
 
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    timestamp = datetime.now().strftime("%Y%m%d")
     output_path = here() / "data" / "rip" / f"{timestamp}"
     output_path.mkdir(parents=True, exist_ok=True)
     logger.info(f"Output directory created: {output_path}")
@@ -81,21 +80,26 @@ def main():
 
                 page_link = base_url + link
                 r = fetch(client, page_link)
+                if r is None:
+                    raise ValueError(f"Failed to fetch page for link: {link}")
 
                 soup = BeautifulSoup(r.text, "html.parser")
 
                 data_card = soup.select_one(
                     "#caresheets > div.container.maincontainer > div > div.col-sm-9.col-md-9 > fieldset:nth-child(1) > table"
                 )
+                if data_card is None:
+                    raise ValueError(f"Data card not found for link: {link}")
+
                 short_card, long_card = data_card.find_all("table")
 
-                details = short_card.find("p").text.split("\n")
+                details = short_card.find("p").text.split("\n")  # type: ignore
                 details = [d.strip().replace("\n", "") for d in details if d.strip()]
 
                 rows = long_card.find_all("tr")
                 description = [row.text.strip().replace("\n", "") for row in rows]
 
-                file_name = f"{hashlib.md5(page_link.encode()).hexdigest()}.txt"
+                file_name = f"{details[0].lower().replace(" ", "_")}.txt"
                 output_file = output_path / file_name
 
                 with open(output_file, "w", encoding="utf-8") as f:
