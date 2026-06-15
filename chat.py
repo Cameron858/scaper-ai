@@ -6,9 +6,6 @@ from langchain_ollama import ChatOllama, OllamaEmbeddings
 from pyprojroot import here
 from starlette.exceptions import StarletteDeprecationWarning
 
-# -----------------------------
-# SYSTEM PROMPT (STRICTER)
-# -----------------------------
 SYS_PROMPT = """
 You are a helpful assistant for fishkeeping and aquarium care.
 
@@ -27,10 +24,6 @@ Rules:
 - If you do not know the answer, say "I don't know".
 """
 
-
-# -----------------------------
-# EMBEDDINGS + VECTOR STORE
-# -----------------------------
 EMBEDDING_MODEL = "nomic-embed-text"
 embeddings = OllamaEmbeddings(model=EMBEDDING_MODEL)
 
@@ -48,16 +41,9 @@ retriever = vector_store.as_retriever(
     },
 )
 
-
-# -----------------------------
-# LLM
-# -----------------------------
 chat = ChatOllama(model="llama3.2")
 
 
-# -----------------------------
-# RESPONSE FUNCTION
-# -----------------------------
 def response(message, history):
 
     global chat, retriever
