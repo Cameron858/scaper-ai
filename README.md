@@ -34,7 +34,7 @@ uv sync
 ### 2. Scrape caresheet data
 
 ```sh
-python scripts/01_scrape_caresheets.py
+uv run scripts/01_scrape_caresheets.py
 ```
 
 This creates a timestamped folder under data/rip/ with one text file per caresheet.
@@ -44,16 +44,26 @@ This creates a timestamped folder under data/rip/ with one text file per careshe
 After scraping, point the vector-store script at the generated folder:
 
 ```sh
-python scripts/02_populate_vector_store.py data/rip/20260612_113827
+uv run scripts/02_populate_vector_store.py data/rip/20260612_113827
 ```
 
 You can override the embedding model or collection name if needed:
 
 ```sh
-python scripts/02_populate_vector_store.py data/rip/20260612_113827 \
+uv run scripts/02_populate_vector_store.py data/rip/20260612_113827 \
   --embedding-model nomic-embed-text \
   --collection-name caresheets
 ```
+
+## Run the Gradio chat app
+
+After the vector store has been built, start the local chat interface with:
+
+```sh
+uv run chat.py
+```
+
+This launches a Gradio web app in your browser (typically at http://127.0.0.1:7860/). The app uses the saved Chroma database in `db/chroma_db` and the Ollama-backed chat model configured in `chat.py`.
 
 ## Notes
 
