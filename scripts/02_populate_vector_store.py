@@ -6,6 +6,7 @@ Usage:
 """
 
 import argparse
+import hashlib
 import logging
 import shutil
 import sys
@@ -101,6 +102,12 @@ def populate_vector_store(
     Returns:
         Chroma vector store instance
     """
+
+    def hash_doc(document: Document) -> str:
+        """"""
+        doc = str(document.model_dump())
+        return hashlib.sha256(doc.encode()).hexdigest()
+
     if persist_directory is None:
         persist_directory = here("db/chroma_db")
 
@@ -114,7 +121,10 @@ def populate_vector_store(
         persist_directory=str(persist_directory),
     )
 
-    vector_store.add_documents(documents=documents)
+    # To avoid document duplication, we create a unique ID based off of the documents content.
+    vector_store.add_documents(
+        documents=documents, ids=[hash_doc(doc) for doc in documents]
+    )
     return vector_store
 
 
