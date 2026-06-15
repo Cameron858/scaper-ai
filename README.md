@@ -54,15 +54,21 @@ This creates a timestamped folder under data/rip/ with one text file per careshe
 After scraping, point the vector-store script at the generated folder:
 
 ```sh
-uv run scripts/02_populate_vector_store.py data/rip/20260612_113827
+uv run scripts/02_populate_vector_store.py <path to data>
 ```
 
 You can override the embedding model or collection name if needed:
 
 ```sh
-uv run scripts/02_populate_vector_store.py data/rip/20260612_113827 \
+uv run scripts/02_populate_vector_store.py <path to data> \
   --embedding-model nomic-embed-text \
   --collection-name caresheets
+```
+
+To recreate a fresh persisted store, use the `--fresh-store` flag:
+
+```sh
+uv run scripts/02_populate_vector_store.py <path to data> --fresh-store
 ```
 
 ## Run the Gradio chat app
