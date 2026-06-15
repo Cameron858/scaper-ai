@@ -31,7 +31,17 @@ This project uses the Python environment managed by the repository.
 uv sync
 ```
 
-### 2. Scrape caresheet data
+### 2. Create your local .env file
+
+Copy the example environment file into place before running the scripts:
+
+```sh
+copy example.env .env
+```
+
+The application loads configuration from `.env`, including the `chat_model` and `embed_model` values defined in `src/scaper_ai/config.py`.
+
+### 3. Scrape caresheet data
 
 ```sh
 uv run scripts/01_scrape_caresheets.py
