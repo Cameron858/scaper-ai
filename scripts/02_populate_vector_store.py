@@ -2,11 +2,12 @@
 Script to create and populate a vector store from documents in a given file path.
 
 Usage:
-    python 02_populate_vector_store.py <path_to_documents>
+    uv run scripts/02_populate_vector_store.py <path_to_documents>
 """
 
 import argparse
 import logging
+import shutil
 import sys
 from pathlib import Path
 
@@ -85,6 +86,7 @@ def populate_vector_store(
     embedding_model: str = "nomic-embed-text",
     collection_name: str = "caresheets",
     persist_directory: Path | None = None,
+    fresh_store: bool = False,
 ) -> Chroma:
     """
     Create and populate a Chroma vector store with documents.
@@ -94,12 +96,16 @@ def populate_vector_store(
         embedding_model: Name of the embedding model to use
         collection_name: Name of the Chroma collection
         persist_directory: Directory to persist the vector store (defaults to chroma_db)
+        fresh_store: If True, remove the existing persist_directory before creating a new store
 
     Returns:
         Chroma vector store instance
     """
     if persist_directory is None:
         persist_directory = here("db/chroma_db")
+
+    if fresh_store and persist_directory.exists():
+        shutil.rmtree(persist_directory)
 
     embeddings = OllamaEmbeddings(model=embedding_model)
     vector_store = Chroma(
@@ -148,6 +154,11 @@ def main():
         type=Path,
         help="Directory to persist the vector store (default: chroma_db)",
     )
+    parser.add_argument(
+        "--fresh-store",
+        action="store_true",
+        help="Remove any existing persisted vector store before creating a fresh one",
+    )
 
     args = parser.parse_args()
 
@@ -186,6 +197,7 @@ def main():
             embedding_model=args.embedding_model,
             collection_name=args.collection_name,
             persist_directory=args.persist_directory,
+            fresh_store=args.fresh_store,
         )
         logger.info(f"Successfully added {len(split_docs)} documents to vector store.")
         logger.info(
